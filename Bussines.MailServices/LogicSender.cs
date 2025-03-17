@@ -48,9 +48,14 @@ namespace Bussines.MailServices
             throw new NotImplementedException();
         }
 
-        public Task<int?> GetWishIdAsync(Guid userId, string friendUsername)
+        public async Task<int?> GetWishIdAsync(Guid userId, string friendUsername)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.GetAsync($"{_baseUrl}/api/mailbot/pozdrik/{friendUsername}/{userId}");
+            if(!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+            return await response.Content.ReadFromJsonAsync<int?>();
         }
     }
 }
