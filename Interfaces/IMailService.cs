@@ -2,5 +2,5 @@
 
 public interface IMailService
 {
-    Task<bool> UpdateUserDataAsync();
+    Task<bool> SengCongratulationsAsync();
 }

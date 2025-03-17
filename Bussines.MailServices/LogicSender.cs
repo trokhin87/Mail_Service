@@ -43,9 +43,14 @@ namespace Bussines.MailServices
             return await response.Content.ReadAsStringAsync();
         }
 
-        public Task<List<FriendDto>> GetTodayBirthdayAsync()
-        {
-            throw new NotImplementedException();
+            public async Task<List<FriendDto>> GetTodayBirthdayAsync()
+            {
+                var response = await _httpClient.GetAsync($"{_baseUrl}/api/mailbot/birthdays/today");
+                if(!response.IsSuccessStatusCode)
+                {
+                    return null;
+                }
+            return await response.Content.ReadFromJsonAsync<List<FriendDto>>() ?? new List<FriendDto>();
         }
 
         public async Task<int?> GetWishIdAsync(Guid userId, string friendUsername)
