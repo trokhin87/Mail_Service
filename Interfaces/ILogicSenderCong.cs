@@ -2,9 +2,10 @@
 
 namespace Interfaces;
 
-public interface ILogic
+public interface ILogicSenderCong
 {
     Task<List<FriendDto>> GetTodayBirthdayAsync();
     Task<int?> GetWishIdAsync(Guid userId, string friendUsername);
-     
+    Task<string> GetEmailAsync(Guid AppId);
+    Task<string?> GetCongrStrAsync(int wishId);
 }
