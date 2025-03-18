@@ -3,43 +3,59 @@ using System.Net.Mail;
 using DTO;
 using Interfaces;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Bussines.MailServices;
 
-public class MailService:IMailService
+public class MailService : IMailService
 {
     private readonly ILogicSenderCong _logicSenderCong;
     private readonly string SMTPServer;
     private readonly int SMTPPort;
     private readonly string emailPassword;
     private readonly string emailFrom;
-    public MailService(ILogicSenderCong logicSenderCong,IConfiguration configuration)
+    private readonly ILogger<MailService> _logger;
+
+    public MailService(ILogicSenderCong logicSenderCong, IConfiguration configuration, ILogger<MailService> logger)
     {  
         _logicSenderCong = logicSenderCong;
+        _logger = logger;
         SMTPPort = 587;
         SMTPServer = configuration["EmailSettings:SmtpServer"];
         emailPassword = configuration["EmailSettings:Password"];
         emailFrom = configuration["EmailSettings:FromEmail"];
     }
+
     public async Task<bool> SengCongratulationsAsync()
     {
+        _logger.LogInformation("Запуск отправки поздравлений");
         List<FriendDto> friendsList = await _logicSenderCong.GetTodayBirthdayAsync();
         if (friendsList == null || friendsList.Count == 0)
         {
+            _logger.LogInformation("Сегодня нет именинников.");
             return false;
         }
 
         foreach (FriendDto friend in friendsList)
         {
-            int? wishId = await _logicSenderCong.GetWishIdAsync(friend.AppId,friend.FriendUsername);
+            _logger.LogInformation($"Обработка поздравления для {friend.FriendUsername}");
+
+            int? wishId = await _logicSenderCong.GetWishIdAsync(friend.AppId, friend.FriendUsername);
             if (wishId == null)
             {
+                _logger.LogWarning($"Поздравление не найдено для {friend.FriendUsername}");
                 continue;
             }
-            string congrTxt=await _logicSenderCong.GetCongrStrAsync(wishId.Value);
-            string? email=await _logicSenderCong.GetEmailAsync(friend.AppId);
-            if (string.IsNullOrEmpty(email)) continue;
-            await SendMail(email,$"Поздравление - {friend.FriendUsername}", congrTxt);
+
+            string congrTxt = await _logicSenderCong.GetCongrStrAsync(wishId.Value);
+            string? email = await _logicSenderCong.GetEmailAsync(friend.AppId);
+            if (string.IsNullOrEmpty(email))
+            {
+                _logger.LogWarning($"Не найден email для {friend.FriendUsername}");
+                continue;
+            }
+
+            await SendMail(email, $"Поздравление - {friend.FriendUsername}", congrTxt);
         }
 
         return true;
@@ -49,7 +65,7 @@ public class MailService:IMailService
     {
         try
         {
-            using (SmtpClient client = new SmtpClient("smtp.gmail.com", 587))
+            using (SmtpClient client = new SmtpClient(SMTPServer, SMTPPort))
             {
                 client.Credentials = new NetworkCredential(emailFrom, emailPassword);
                 client.EnableSsl = true;
@@ -65,11 +81,12 @@ public class MailService:IMailService
                 await client.SendMailAsync(mailMessage);
             }
 
+            _logger.LogInformation($"Письмо успешно отправлено на {to}");
             return true;
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Ошибка отправки письма: {ex.Message}");
+            _logger.LogError($"Ошибка отправки письма: {ex.Message}");
             return false;
         }
     }

@@ -1,66 +1,69 @@
 ﻿using DTO;
 using Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System.Net.Http.Json;
 
-namespace Bussines.MailServices
+namespace Bussines.MailServices;
+
+public class LogicSender : ILogicSenderCong
 {
-    public class LogicSender : ILogicSenderCong
+    private readonly HttpClient _httpClient;
+    private readonly string _baseUrl;
+    private readonly ILogger<LogicSender> _logger;
+
+    public LogicSender(HttpClient httpClient, IConfiguration configuration, ILogger<LogicSender> logger)
     {
-        private readonly HttpClient _httpClient;
-        private readonly string _baseUrl;
+        _httpClient = httpClient;
+        _logger = logger;
+        _baseUrl = configuration["ProxyMicroservice:BaseUrl"];
+    }
 
-        public LogicSender(HttpClient httpClient, IConfiguration configuration)
+    public async Task<string?> GetCongrStrAsync(int wishId)
+    {
+        _logger.LogInformation($"Получение поздравления с ID {wishId}");
+        var response = await _httpClient.GetAsync($"{_baseUrl}/api/mailbot/{wishId}");
+        if (!response.IsSuccessStatusCode)
         {
-            _httpClient = httpClient;
-            _baseUrl = configuration["ProxyMicroservice:BaseUrl"];
+            _logger.LogWarning($"Не удалось получить поздравление. Код: {response.StatusCode}");
+            return null;
         }
+        return await response.Content.ReadAsStringAsync();
+    }
 
-
-
-        public async Task<string?> GetCongrStrAsync(int wishId)
+    public async Task<string> GetEmailAsync(Guid AppId)
+    {
+        _logger.LogInformation($"Получение email для AppId: {AppId}");
+        var response = await _httpClient.GetAsync($"{_baseUrl}/api/mailbot/email/{AppId}");
+        if (!response.IsSuccessStatusCode)
         {
-            var response = await _httpClient.GetAsync($"{_baseUrl}/api/mailbot/{wishId}");
-            if(!response.IsSuccessStatusCode)
-            {
-                return null;
-            }
-            return await response.Content.ReadAsStringAsync();
+            _logger.LogWarning($"Email не найден. Код: {response.StatusCode}");
+            return null;
         }
+        return await response.Content.ReadAsStringAsync();
+    }
 
-        public async Task<string> GetEmailAsync(Guid AppId)
+    public async Task<List<FriendDto>> GetTodayBirthdayAsync()
+    {
+        _logger.LogInformation("Получение списка именинников на сегодня");
+        var response = await _httpClient.GetAsync($"{_baseUrl}/api/mailbot/birthdays/today");
+        if (!response.IsSuccessStatusCode)
         {
-            var response = await _httpClient.GetAsync($"{_baseUrl}/api/mailbot/email/{AppId}");
-            if(!response.IsSuccessStatusCode)
-            {
-                return null;
-            }
-            return await response.Content.ReadAsStringAsync();
+            _logger.LogWarning($"Ошибка при получении списка. Код: {response.StatusCode}");
+            return null;
         }
+        return await response.Content.ReadFromJsonAsync<List<FriendDto>>() ?? new List<FriendDto>();
+    }
 
-            public async Task<List<FriendDto>> GetTodayBirthdayAsync()
-            {
-                var response = await _httpClient.GetAsync($"{_baseUrl}/api/mailbot/birthdays/today");
-                if(!response.IsSuccessStatusCode)
-                {
-                    return null;
-                }
-            return await response.Content.ReadFromJsonAsync<List<FriendDto>>() ?? new List<FriendDto>();
-        }
-
-        public async Task<int?> GetWishIdAsync(Guid userId, string friendUsername)
+    public async Task<int?> GetWishIdAsync(Guid userId, string friendUsername)
+    {
+        _logger.LogInformation($"Получение ID поздравления для {friendUsername}");
+        var response = await _httpClient.GetAsync($"{_baseUrl}/api/mailbot/pozdrik/{friendUsername}/{userId}");
+        if (!response.IsSuccessStatusCode)
         {
-            var response = await _httpClient.GetAsync($"{_baseUrl}/api/mailbot/pozdrik/{friendUsername}/{userId}");
-            if(!response.IsSuccessStatusCode)
-            {
-                return null;
-            }
-            return await response.Content.ReadFromJsonAsync<int?>();
+            _logger.LogWarning($"Поздравление не найдено. Код: {response.StatusCode}");
+            return null;
         }
+        return await response.Content.ReadFromJsonAsync<int?>();
     }
 }
