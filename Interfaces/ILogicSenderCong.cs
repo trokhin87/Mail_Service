@@ -5,7 +5,7 @@ namespace Interfaces;
 public interface ILogicSenderCong
 {
     Task<List<FriendDto>> GetTodayBirthdayAsync();
-    Task<int?> GetWishIdAsync( FriendDto friendDto);
+    Task<PozdrikIdDto?> GetWishIdAsync( FriendDto friendDto);
     Task<string> GetEmailAsync(Guid AppId);
     Task<string?> GetCongrStrAsync(int wishId);
 }

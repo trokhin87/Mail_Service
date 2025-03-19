@@ -41,9 +41,9 @@ public class MailService : IMailService
             if(friend.FriendUsername!="james_taylor"){continue;}
             _logger.LogInformation($"Обработка поздравления для {friend.FriendUsername}");
 
-            int? wishId = await _logicSenderCong.GetWishIdAsync(friend);
-            string congrTxt=string.Empty;
-            if (wishId == 0)
+            PozdrikIdDto? wishId = await _logicSenderCong.GetWishIdAsync(friend);
+            string? congrTxt = string.Empty;
+            if (wishId._pozdrikId == 0 || wishId._pozdrikId == null)
             {
                 
                 _logger.LogWarning($"Поздравление не найдено для {friend.FriendUsername}");
@@ -52,7 +52,7 @@ public class MailService : IMailService
             else
             {
 
-                congrTxt = await _logicSenderCong.GetCongrStrAsync(wishId.Value);
+                congrTxt = await _logicSenderCong.GetCongrStrAsync(wishId._pozdrikId.Value);
             }
 
             string? email = await _logicSenderCong.GetEmailAsync(friend.AppId);

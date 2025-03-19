@@ -22,7 +22,7 @@ public class LogicSender : ILogicSenderCong
     public async Task<string?> GetCongrStrAsync(int wishId)
     {
         _logger.LogInformation($"Получение поздравления с ID {wishId}");
-        var response = await _httpClient.GetAsync($"{_baseUrl}/api/mailbot/{wishId}");
+        var response = await _httpClient.GetAsync($"{_baseUrl}/api/mailbot/GetCongrString/{wishId}");
         if (!response.IsSuccessStatusCode)
         {
             _logger.LogWarning($"Не удалось получить поздравление. Код: {response.StatusCode}");
@@ -55,7 +55,7 @@ public class LogicSender : ILogicSenderCong
         return await response.Content.ReadFromJsonAsync<List<FriendDto>>() ?? new List<FriendDto>();
     }
 
-    public async Task<int?> GetWishIdAsync(FriendDto friendDto)
+    public async Task<PozdrikIdDto?> GetWishIdAsync(FriendDto friendDto)
     {
         _logger.LogInformation($"Получение ID поздравления для {friendDto.FriendUsername}");
         var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/api/mailbot/getPozdrikId", friendDto);
@@ -64,8 +64,8 @@ public class LogicSender : ILogicSenderCong
         if (!response.IsSuccessStatusCode)
         {
             _logger.LogWarning($"Поздравление не найдено. Код: {response.StatusCode}");
-            return 0;
+            return null;
         }
-        return await response.Content.ReadFromJsonAsync<int?>();
+        return await response.Content.ReadFromJsonAsync<PozdrikIdDto>();
     }
 }
