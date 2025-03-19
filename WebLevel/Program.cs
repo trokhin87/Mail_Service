@@ -5,8 +5,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.EnableAnnotations();
+});
 
 // Настройка логирования
 Log.Logger = new LoggerConfiguration()
@@ -19,7 +25,6 @@ builder.Host.UseSerilog();
 // Добавляем сервисы
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddHttpClient<ILogicSenderCong, LogicSender>();
 builder.Services.AddTransient<IMailService, MailService>();

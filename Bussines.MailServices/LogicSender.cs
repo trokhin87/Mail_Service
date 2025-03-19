@@ -55,14 +55,16 @@ public class LogicSender : ILogicSenderCong
         return await response.Content.ReadFromJsonAsync<List<FriendDto>>() ?? new List<FriendDto>();
     }
 
-    public async Task<int?> GetWishIdAsync(Guid userId, string friendUsername)
+    public async Task<int?> GetWishIdAsync(FriendDto friendDto)
     {
-        _logger.LogInformation($"Получение ID поздравления для {friendUsername}");
-        var response = await _httpClient.GetAsync($"{_baseUrl}/api/mailbot/pozdrik/{friendUsername}/{userId}");
+        _logger.LogInformation($"Получение ID поздравления для {friendDto.FriendUsername}");
+        var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/api/mailbot/getPozdrikId", friendDto);
+            
+        
         if (!response.IsSuccessStatusCode)
         {
             _logger.LogWarning($"Поздравление не найдено. Код: {response.StatusCode}");
-            return null;
+            return 0;
         }
         return await response.Content.ReadFromJsonAsync<int?>();
     }

@@ -35,25 +35,33 @@ public class MailService : IMailService
             _logger.LogInformation("Сегодня нет именинников.");
             return false;
         }
-
+        
         foreach (FriendDto friend in friendsList)
         {
+            if(friend.FriendUsername!="james_taylor"){continue;}
             _logger.LogInformation($"Обработка поздравления для {friend.FriendUsername}");
 
-            int? wishId = await _logicSenderCong.GetWishIdAsync(friend.AppId, friend.FriendUsername);
-            if (wishId == null)
+            int? wishId = await _logicSenderCong.GetWishIdAsync(friend);
+            string congrTxt=string.Empty;
+            if (wishId == 0)
             {
+                
                 _logger.LogWarning($"Поздравление не найдено для {friend.FriendUsername}");
-                continue;
+                congrTxt = "счастья";
+            }
+            else
+            {
+
+                congrTxt = await _logicSenderCong.GetCongrStrAsync(wishId.Value);
             }
 
-            string congrTxt = await _logicSenderCong.GetCongrStrAsync(wishId.Value);
             string? email = await _logicSenderCong.GetEmailAsync(friend.AppId);
             if (string.IsNullOrEmpty(email))
             {
                 _logger.LogWarning($"Не найден email для {friend.FriendUsername}");
                 continue;
             }
+            
 
             await SendMail(email, $"Поздравление - {friend.FriendUsername}", congrTxt);
         }
