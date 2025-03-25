@@ -1,0 +1,33 @@
+2025-03-26 00:22:38.935 +03:00 [INF] Следующая отправка писем через 08:37:21.0686153
+2025-03-26 00:22:38.981 +03:00 [WRN] Overriding address(es) 'http://localhost:5072'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-03-26 00:22:38.989 +03:00 [INF] Now listening on: http://localhost:5072
+2025-03-26 00:22:38.989 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-26 00:22:38.990 +03:00 [INF] Hosting environment: Development
+2025-03-26 00:22:38.990 +03:00 [INF] Content root path: C:\Users\trokh\RiderProjects\Mail_Service\WebLevel
+2025-03-26 00:22:40.614 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5072/ - null null
+2025-03-26 00:22:40.653 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5072/ - 404 0 null 39.999ms
+2025-03-26 00:22:40.666 +03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5072/, Response status code: 404
+2025-03-26 00:22:43.295 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5072/swagger - null null
+2025-03-26 00:22:43.302 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5072/swagger - 301 0 null 6.5201ms
+2025-03-26 00:22:43.304 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5072/swagger/index.html - null null
+2025-03-26 00:22:43.349 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5072/swagger/index.html - 200 null text/html;charset=utf-8 45.0616ms
+2025-03-26 00:22:43.361 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5072/swagger/swagger-ui.css - null null
+2025-03-26 00:22:43.364 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5072/swagger/index.css - null null
+2025-03-26 00:22:43.364 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5072/swagger/swagger-ui-bundle.js - null null
+2025-03-26 00:22:43.364 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5072/swagger/swagger-ui-standalone-preset.js - null null
+2025-03-26 00:22:43.365 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5072/swagger/index.js - null null
+2025-03-26 00:22:43.370 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5072/swagger/index.js - 200 null application/javascript;charset=utf-8 4.5313ms
+2025-03-26 00:22:43.372 +03:00 [INF] Sending file. Request path: '/index.css'. Physical path: 'N/A'
+2025-03-26 00:22:43.372 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5072/swagger/index.css - 200 202 text/css 8.04ms
+2025-03-26 00:22:43.377 +03:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2025-03-26 00:22:43.377 +03:00 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2025-03-26 00:22:43.380 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5072/swagger/swagger-ui-standalone-preset.js - 200 229223 text/javascript 15.0965ms
+2025-03-26 00:22:43.380 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5072/swagger/swagger-ui.css - 200 154948 text/css 18.7703ms
+2025-03-26 00:22:43.386 +03:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2025-03-26 00:22:43.387 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5072/swagger/swagger-ui-bundle.js - 200 1466324 text/javascript 22.253ms
+2025-03-26 00:22:43.711 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5072/swagger/v1/swagger.json - null null
+2025-03-26 00:22:43.716 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5072/swagger/favicon-32x32.png - null null
+2025-03-26 00:22:43.718 +03:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2025-03-26 00:22:43.719 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5072/swagger/favicon-32x32.png - 200 628 image/png 2.5905ms
+2025-03-26 00:22:43.792 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5072/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 81.3143ms
+2025-03-26 00:23:19.955 +03:00 [INF] Application is shutting down...

@@ -6,13 +6,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Swashbuckle.AspNetCore.Filters;
+using WebApplication1.SwaggerExamples;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSwaggerGen(c =>
 {
     c.EnableAnnotations();
+    c.ExampleFilters();
 });
+builder.Services.AddSwaggerExamplesFromAssemblyOf<SendCongratulationsExample>();
 
 // Настройка логирования
 Log.Logger = new LoggerConfiguration()
