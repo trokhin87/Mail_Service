@@ -8,7 +8,7 @@ MailService — микросервис, отвечающий за отправк
 - ASP.NET Core
 - Swashbuckle (Swagger) для документации API
 - Serilog для логирования
-- HttpClient для взаимодействия с [[DBProxy(микросервис)](https://github.com/Gandoler/OTSC_DBProxy)]]
+- HttpClient для взаимодействия с [DBProxy(микросервис)](https://github.com/Gandoler/OTSC_DBProxy)]
 
 ### Взаимодействие с другими микросервисами:
 - Получает данные о пользователях из другого микросервиса (например, UserService или NotificationService) через HTTP-запросы.
