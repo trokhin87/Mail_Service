@@ -56,5 +56,5 @@ dotnet test
 ## 6. Контакты и поддержка
 - Автор: [trokhin87]
 - GitHub: [Ссылка на репозиторий](https://github.com/trokhin87/Mail_Service)
-- Telegram: [Мой  Telegram](https://t.me/m0neylonger)]
+- Telegram: [Мой  Telegram](https://t.me/m0neylonger)
 
