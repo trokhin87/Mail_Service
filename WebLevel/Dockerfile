@@ -25,7 +25,7 @@ FROM base AS final
 WORKDIR /app
 COPY --from=build /app/publish .
 
-ENV dbProxy=uenv
+ENV BaseUrl=uenv
 ENV SmtpServer=uenv
 ENV Port=uenv
 ENV Password=uenv
