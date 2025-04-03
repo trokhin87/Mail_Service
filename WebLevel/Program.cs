@@ -71,8 +71,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => c.EnableAnnotations());
 
-builder.Services.AddScoped<ILogicSenderCong, LogicSender>();
-builder.Services.AddScoped<IMailService, MailService>();
+builder.Services.AddHttpClient<ILogicSenderCong, LogicSender>(client =>
+{
+    if (string.IsNullOrEmpty(dbProxy)) throw new Exception("dbProxy не инициализирован");
+    client.BaseAddress = new Uri(dbProxy);
+});
+builder.Services.AddTransient<IMailService, MailService>();
 builder.Services.AddHostedService<MailBackgroundService>();
 
 var app = builder.Build();
