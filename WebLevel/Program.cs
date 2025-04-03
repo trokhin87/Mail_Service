@@ -45,15 +45,17 @@ else
     builder.Services.Configure<SmtpSettings>(options =>
     {
         options.SmtpServer = Environment.GetEnvironmentVariable("SmtpServer") ?? throw new Exception("SmtpServer is missing");
-
+        Log.Information($"SmtpServer { options.SmtpServer}");
         if (!int.TryParse(Environment.GetEnvironmentVariable("Port"), out int port))
         {
             throw new Exception("Port is missing or invalid");
         }
         options.Port = port;
-
+        Log.Information($"Port { options.Port}");
         options.Password = Environment.GetEnvironmentVariable("Password") ?? throw new Exception("Password is missing");
+        Log.Information($"Password { options.Password}");
         options.FromEmail = Environment.GetEnvironmentVariable("FromEmail") ?? throw new Exception("FromEmail is missing");
+        Log.Information($"FromEmail { options.FromEmail}");
     });
 }
 
@@ -73,12 +75,13 @@ builder.Services.AddHostedService<MailBackgroundService>();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseAuthorization();
 app.MapControllers();
+
+Log.Information("Starting web application");
+Log.Information($"dbProxy is listening on {dbProxy}");
+
 app.Run();
