@@ -4,26 +4,26 @@ using DTO;
 using Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using WebApplication1;
 
 namespace Bussines.MailServices;
 
 public class MailService : IMailService
 {
     private readonly ILogicSenderCong _logicSenderCong;
-    private readonly string SMTPServer;
-    private readonly int SMTPPort;
-    private readonly string emailPassword;
-    private readonly string emailFrom;
+        // ("SmtpServer") 
+        // ("Port") 
+        // ("Password") 
+        // ("FromEmail")
+    private readonly SmtpSettings _configuration;
     private readonly ILogger<MailService> _logger;
 
-    public MailService(ILogicSenderCong logicSenderCong, IConfiguration configuration, ILogger<MailService> logger)
+    public MailService(ILogicSenderCong logicSenderCong, IOptions<SmtpSettings> smtpSettings , ILogger<MailService> logger)
     {  
         _logicSenderCong = logicSenderCong;
         _logger = logger;
-        SMTPPort = 587;
-        SMTPServer = configuration["EmailSettings:SmtpServer"];
-        emailPassword = configuration["EmailSettings:Password"];
-        emailFrom = configuration["EmailSettings:FromEmail"];
+        _configuration = smtpSettings.Value;
     }
 
     public async Task<bool> SengCongratulationsAsync()
@@ -73,14 +73,14 @@ public class MailService : IMailService
     {
         try
         {
-            using (SmtpClient client = new SmtpClient(SMTPServer, SMTPPort))
+            using (SmtpClient client = new SmtpClient(_configuration.SmtpServer, _configuration.Port))
             {
-                client.Credentials = new NetworkCredential(emailFrom, emailPassword);
+                client.Credentials = new NetworkCredential(_configuration.FromEmail, _configuration.Password);
                 client.EnableSsl = true;
 
                 MailMessage mailMessage = new MailMessage
                 {
-                    From = new MailAddress(emailFrom),
+                    From = new MailAddress(_configuration.FromEmail),
                     Subject = subject,
                     Body = body
                 };
