@@ -62,6 +62,7 @@ else
 
 builder.Services.AddHttpClient("ProxyApiClient", client =>
 {
+    if (string.IsNullOrEmpty(dbProxy)) throw new Exception("dbProxy не инициализирован");
     client.BaseAddress = new Uri(dbProxy); 
 });
 
