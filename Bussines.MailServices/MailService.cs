@@ -38,7 +38,6 @@ public class MailService : IMailService
         
         foreach (FriendDto friend in friendsList)
         {
-            if(friend.FriendUsername!="james_taylor"){continue;}
             _logger.LogInformation($"Обработка поздравления для {friend.FriendUsername}");
 
             PozdrikIdDto? wishId = await _logicSenderCong.GetWishIdAsync(friend);
